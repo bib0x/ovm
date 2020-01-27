@@ -1,0 +1,64 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/dumper"
+
+function __ovm_cmd_do_info {
+    mod_name=$1
+
+    IFS=:
+    for p in $OVM_MODULES_PATH; 
+    do
+        path="$p/$mod_name/README.md"
+        if [ -f "$path" ];
+        then
+            __ovm_markdown_dumper "$path"
+        fi
+    done
+    unset IFS
+}
+
+function __ovm_cmd_do_load {
+    mod_name=$1
+
+    IFS=:
+    for p in $OVM_MODULES_PATH;
+    do
+        path="$p/$mod_name/loader"
+        if [ -f "$path" ];
+        then
+            source "$path"
+        fi
+    done
+    unset IFS
+}
+
+function __ovm_cmd_do_ls {
+    IFS=:
+    for p in $OVM_MODULES_PATH;
+    do
+        echo ""
+        echo -e "\033[36;1m${p/$HOME/\~}\033[0m"
+        for mod_name in "$p"/*;
+        do
+            if [ -d "$mod_name" ];
+            then
+                echo -e "\033[32;1m$(basename "$mod_name")\033[0m"
+                for func in "$mod_name/functions"/*;
+                do
+                    if [ -f "$func" ];
+                    then
+                        if [[ "$func" == *".disabled" ]];
+                        then
+                            disabled=$(basename "$func" | sed 's/.disabled//')
+                            echo -e "  \033[31m$disabled\033[033m"
+                        else
+                            echo "  $(basename $func)"
+                        fi
+                    fi
+                done
+            fi
+        done
+    done
+    unset IFS
+    echo ""
+}

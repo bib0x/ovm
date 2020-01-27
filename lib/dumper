@@ -1,0 +1,29 @@
+#!/bin/bash
+
+function __ovm_markdown_dumper {
+    path=$1
+
+    # Glow: https://github.com/charmbracelet/glow
+    glowbin="$GOPATH/bin/glow"
+    command -v "$glowbin" >/dev/null 2>&1
+    if [ $? -eq 0 ];
+    then
+        $glowbin -s dark "$path"
+        return
+    fi
+
+    # Pandoc & lynx
+    command -v pandoc >/dev/null 2>&1
+    if [ $? -eq 0 ];
+    then
+        command -v lynx >/dev/null 2>&1
+        if [ $? -eq 0 ];
+        then
+            pandoc "$path" | lynx -stdin
+            return
+        fi
+    fi
+
+    # Default
+    /bin/cat "$path"
+}

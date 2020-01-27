@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function __ovm_dynamic_loader {
+    path=$1
+    for file in "$path"/*;
+    do
+        if [ -f "$file" ]; 
+        then
+            funcfile=$(basename "$file")
+            [[ "$funcfile" == *".disabled" ]] || source "$file"; 
+        fi
+    done
+}

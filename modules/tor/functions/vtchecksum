@@ -1,0 +1,41 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requirements
+# ---------------------------------------
+OVM_VT_APITOKEN="$HOME/.api/virus-total.key"
+OVM_VT_TORPROXY="/usr/local/etc/proxychains.conf"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("proxychains4" "curl" "jq")
+local configs=("$OVM_VT_APITOKEN" \
+               "/var/run/tor/tor.pid" \
+               "$OVM_VT_TORPROXY")
+
+__ovm_validator_packages "tor-vt" "${packages[@]}" || return
+__ovm_validator_configs  "tor-vt" "${configs[@]}"  || return
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tor-vtchecksum {
+
+    __ovm_validator_parameters_len 1 $# "usage: ${FUNCNAME[0]} <sha256>" || return 
+
+    local chksum=$1
+    local ua="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
+
+    # Check if proxychains is configured correctly
+    # on default tor socks proxy port.
+    [[ $(grep 9050 "$OVM_VT_TORPROXY") != \#* ]] || { echo "Tor proxy disabled (check $OVM_TOR_PROXY)"; return 1; }
+
+    local apikey=$(cat "$OVM_VT_APITOKEN")
+    local scan_res=/tmp/torvt
+    local url="https://www.virustotal.com/vtapi/v2/file/report?apikey=$apikey&resource=$chksum"
+
+    proxychains4 -f "$OVM_VT_TORPROXY" curl -sk --request GET --url "$url" -A "$ua" -o "$scan_res"
+    jq -r ". | {detected: .positives, checks: .total}" $scan_res
+}

@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# ---------------------------------------
+# Guards
+# ---------------------------------------
+# Mandatory configuration
+if [ -z "$OVM_PATH" ];
+then
+    echo "Environment variable OVM_PATH not defined. (check your bashrc)"
+    echo "export OVM_PATH=/path/to/this/repository."
+    return 1
+fi
+
+# Default modules path
+if [ -z "$OVM_MODULES_PATH" ];
+then
+    export OVM_MODULES_PATH="$OVM_PATH/modules"
+fi
+
+# Autocomplete
+if [ -e "$OVM_PATH/ovm-completion.bash" ];
+then
+    source "$OVM_PATH/ovm-completion.bash"
+fi
+# ---------------------------------------
+# Utils
+# ---------------------------------------
+function __ovm_usage {
+    echo "OVM"
+    echo "==="
+    echo ""
+    echo "This project is a dynamic Bash functions loader."
+    echo ""
+    echo "Commands"
+    echo "--------"
+    echo "ovm <command>"
+    echo "    info      show module information in README.md (if available)"
+    echo "    load      load all functions in a module"
+    echo "    ls        list available modules and functions"
+    echo ""
+}
+
+# ---------------------------------------
+# Main
+# ---------------------------------------
+function ovm {
+    source "$OVM_PATH/cmd/actions"
+    case $# in
+        1)
+            case $1 in
+                ls)
+                    __ovm_cmd_do_ls
+                    ;;
+                 *)
+                    echo "option $1 not defined."
+                    __ovm_usage
+                    ;;
+            esac
+            ;;
+        2)
+            case $1 in
+                info)
+                    __ovm_cmd_do_info "$2"
+                    ;;
+                load)
+                    __ovm_cmd_do_load "$2"
+                    ;;
+                *)
+                    echo "option $1 not defined."
+                    __ovm_usage
+                    ;;
+            esac
+            ;;
+        *)
+            __ovm_usage
+            ;;
+    esac
+}

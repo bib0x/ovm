@@ -1,0 +1,31 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Configuration
+# ---------------------------------------
+OVM_FSALIAS_ROOT="$HOME/.fs_aliases"
+
+# ---------------------------------------
+# Requirements
+# ---------------------------------------
+local configs_dir=("$OVM_FSALIAS_ROOT")
+__ovm_validator_directory "fsalias-go" "${configs_dir[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function fsalias-save {
+   
+    [[ $# -lt 2 ]] || { echo "usage: ${FUNCNAME[0]} [ <alias-name> ]"; return 1; }
+
+   local target="$OVM_FSALIAS_ROOT/$(basename $PWD)"
+
+   if [ $# -eq 1 ];
+   then
+       target="$OVM_FSALIAS_ROOT/$1"
+   fi
+
+   ln -s "$PWD" "$target"
+}

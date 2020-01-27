@@ -1,0 +1,46 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Configuration
+# ---------------------------------------
+OVM_FSALIAS_ROOT="$HOME/.fs_aliases"
+
+# ---------------------------------------
+# Requirements
+# ---------------------------------------
+local configs_dir=("$OVM_FSALIAS_ROOT")
+__ovm_validator_directory "fsalias-go" "${configs_dir[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function fsalias-go {
+   
+   __ovm_validator_parameters_len 1 $# "usage: ${FUNCNAME[0]} <fsalias>" || return 
+
+   local path="$OVM_FSALIAS_ROOT/$1"
+
+   [ -h "$path" ] || { echo "$path not found."; return 1; }
+   
+   cd -P "$path" || return;
+}
+
+# ---------------------------------------
+# Autocompletion
+# ---------------------------------------
+function __fsalias_go_completion() {
+    local cur
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    case $COMP_CWORD in
+        1)
+            aliases_dirs=$(find "$OVM_FSALIAS_ROOT/" -name "$cur*"  -printf "%f ")
+            COMPREPLY=($( compgen -W "$aliases_dirs" -- "$cur" ) )
+            ;;
+    esac
+}
+
+complete -F __fsalias_go_completion fsalias-go

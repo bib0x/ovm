@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/loader"
+
+root=$(dirname "${BASH_SOURCE[0]}")
+__ovm_dynamic_loader "$root/functions"
