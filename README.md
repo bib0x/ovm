@@ -28,7 +28,7 @@ Setup
 Steps to perform:
 
 - git clone this repository
-- define to you `.bashrc` the variable `OVM_PATH` and `OVM_MODULES_PATH` (for custom modules)
+- define to your `.bashrc` the variable `OVM_PATH` and `OVM_MODULES_PATH` (for custom modules)
 - source the global `ovm` bash function
 
 ```
@@ -39,7 +39,7 @@ export OVM_MODULES_PATH="$OVM_PATH/modules:$HOME/work/git/ovm-modules"
 source $OVM_PATH/ovm
 ...
 ```
-By default, if no `OVM_MODULES_PATH` enviromnent variable is defined,
+By default, if no `OVM_MODULES_PATH` environment variable is defined,
 the value will be `export OVM_MODULES_PATH="$OVM_PATH/modules"`.
 
 If you don't want to use the default modules, you can just do 
@@ -47,7 +47,7 @@ If you don't want to use the default modules, you can just do
 
 ## Command
 
-Help options
+Help
 ```
 OVM
 ===
