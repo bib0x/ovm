@@ -11,7 +11,7 @@ OVM_FSALIAS_ROOT="$HOME/.fs_aliases"
 # Requirements
 # ---------------------------------------
 local configs_dir=("$OVM_FSALIAS_ROOT")
-__ovm_validator_directory "fsalias-go" "${configs_dir[@]}" || return
+__ovm_validator_directories "fsalias-go" "${configs_dir[@]}" || return
 
 # ---------------------------------------
 # Code
