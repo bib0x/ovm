@@ -1,0 +1,36 @@
+#!/bin/bash
+
+function __ovm_ssh_start_lforward {
+   localport="$1"
+   hostname="$2"
+   remoteport="$3"
+
+   command -v ssh >/dev/null 2>&1
+   if [ $? -eq 0 ];
+   then
+        ssh "$hostname" -L "$localport:127.0.0.1:$remoteport" -N -f
+   fi
+}
+
+function __ovm_ssh_start_lforward_config {
+    host=$1
+    configfile=${2:-"$HOME/.ssh/config"}
+
+    [ -f "$configfile" ] || { echo "SSH config: $configfile not found."; return 1; }
+
+    command -v ssh >/dev/null 2>&1
+    if [ $? -eq 0 ];
+    then
+        ssh "$host" -F "$configfile" -N -f
+    fi
+}
+
+function __ovm_ssh_stop_forward {
+    localport="$1"
+
+    command -v fuser >/dev/null 2>&1
+    if [  $? -eq 0 ];
+    then
+        fuser -n tcp "$localport" >/dev/null 2>&1 -k
+    fi
+}
