@@ -1,0 +1,21 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("openssl")
+
+__ovm_validator_packages "openssl-cert-validity" "${packages[@]}" || return
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function openssl-cert-validity {
+	
+	local host=$1
+	local port=${2:-443}
+
+	echo | openssl s_client -servername $host -connect $host:$port 2>/dev/null | openssl x509 -noout -dates
+}
+
