@@ -37,7 +37,7 @@ function __fsalias_go_completion() {
 
     case $COMP_CWORD in
         1)
-            aliases_dirs=$(find "$OVM_FSALIAS_ROOT/" -name "$cur*"  -printf "%f ")
+            aliases_dirs=$(find "$OVM_FSALIAS_ROOT/" -name "$cur*"  -printf "%P ")
             COMPREPLY=($( compgen -W "$aliases_dirs" -- "$cur" ) )
             ;;
     esac
