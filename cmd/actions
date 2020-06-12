@@ -50,7 +50,7 @@ function __ovm_cmd_do_ls {
                         if [[ "$func" == *".disabled" ]];
                         then
                             disabled=$(basename "$func" | sed 's/.disabled//')
-                            echo -e "  \033[31m$disabled\033[033m"
+                            echo -e "  \033[31m$disabled\033[0m"
                         else
                             echo "  $(basename $func)"
                         fi
