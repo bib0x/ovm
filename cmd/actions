@@ -62,3 +62,14 @@ function __ovm_cmd_do_ls {
     unset IFS
     echo ""
 }
+
+function __ovm_cmd_do_show_envvars {
+    IFS=:
+    for p in $OVM_MODULES_PATH;
+    do
+        if [ -d "$p" ]; then
+            grep -hR 'export OVM_' "$p"/
+        fi
+    done
+    unset IFS
+}
