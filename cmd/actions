@@ -63,7 +63,7 @@ function __ovm_cmd_do_ls {
     echo ""
 }
 
-function __ovm_cmd_do_show_envvars {
+function __ovm_cmd_do_show_config {
     IFS=:
     for p in $OVM_MODULES_PATH;
     do
@@ -72,4 +72,8 @@ function __ovm_cmd_do_show_envvars {
         fi
     done
     unset IFS
+}
+
+function __ovm_cmd_do_show_envvars {
+    env | grep -E '^OVM_'
 }

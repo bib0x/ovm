@@ -34,7 +34,8 @@ function __ovm_usage {
     echo "Commands"
     echo "--------"
     echo "ovm <command>"
-    echo "    env       show environment variables defined/used in modules"
+    echo "    config    show environment variables defined/used in modules"
+    echo "    env       show loaded OVM environment variables"
     echo "    info      show module information in README.md (if available)"
     echo "    load      load all functions in a module"
     echo "    ls        list available modules and functions"
@@ -49,11 +50,14 @@ function ovm {
     case $# in
         1)
             case $1 in
-                ls)
-                    __ovm_cmd_do_ls
+                config)
+                    __ovm_cmd_do_show_config
                     ;;
                 env)
                     __ovm_cmd_do_show_envvars
+                    ;;
+                ls)
+                    __ovm_cmd_do_ls
                     ;;
                  *)
                     echo "option $1 not defined."

@@ -12,7 +12,7 @@ function __ovm_completions() {
 
     case $COMP_CWORD in
         1)
-            opts="env info load ls"
+            opts="config env info load ls"
             COMPREPLY=( $( compgen -W "${opts}" -- "$cur" ) )
             ;;
         2)

@@ -57,9 +57,12 @@ This project is a dynamic Bash functions loader.
 Commands
 --------
 ovm <command>
+    config    show environment variables defined/used in modules
+    env       show loaded OVM environment variables
     info      show module information in README.md (if available)
     load      load all functions in a module
     ls        list available modules and functions
+
 ```
 
 Listing modules
