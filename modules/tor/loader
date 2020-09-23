@@ -2,5 +2,8 @@
 
 source "$OVM_PATH/lib/loader"
 
+export OVM_VT_APITOKEN="${OVM_VT_APITOKEN:-$HOME/.api/virus-total.key}"
+export OVM_VT_TORPROXY="${OVM_VT_TORPROXY:-/usr/local/etc/proxychains.conf}"
+
 root=$(dirname "${BASH_SOURCE[0]}")
 __ovm_dynamic_loader "$root/functions"

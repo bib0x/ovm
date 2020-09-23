@@ -5,12 +5,6 @@ source "$OVM_PATH/lib/validator"
 # ---------------------------------------
 # Requirements
 # ---------------------------------------
-OVM_VT_APITOKEN="$HOME/.api/virus-total.key"
-OVM_VT_TORPROXY="/usr/local/etc/proxychains.conf"
-
-# ---------------------------------------
-# Requierements
-# ---------------------------------------
 local packages=("proxychains4" "curl" "jq")
 local configs=("$OVM_VT_APITOKEN" \
                "/var/run/tor/tor.pid" \

@@ -2,5 +2,7 @@
 
 source "$OVM_PATH/lib/loader"
 
+export OVM_FSALIAS_ROOT="${OVM_FSALIAS_ROOT:-$HOME/.fs_aliases}"
+
 root=$(dirname "${BASH_SOURCE[0]}")
 __ovm_dynamic_loader "$root/functions"

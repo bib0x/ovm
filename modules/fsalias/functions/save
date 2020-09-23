@@ -3,11 +3,6 @@
 source "$OVM_PATH/lib/validator"
 
 # ---------------------------------------
-# Configuration
-# ---------------------------------------
-OVM_FSALIAS_ROOT="$HOME/.fs_aliases"
-
-# ---------------------------------------
 # Requirements
 # ---------------------------------------
 local configs_dir=("$OVM_FSALIAS_ROOT")
