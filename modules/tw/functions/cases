@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("task")
+
+__ovm_validator_packages "tw-cases" "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tw-cases {
+    casetag="${1:-+case}"
+    task "${casetag}" projects
+}

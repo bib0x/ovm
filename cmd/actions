@@ -5,7 +5,7 @@ source "$OVM_PATH/lib/dumper"
 function __ovm_cmd_do_info {
     mod_name=$1
 
-    IFS=:
+    IFS=$':'
     for p in $OVM_MODULES_PATH; 
     do
         path="$p/$mod_name/README.md"
@@ -20,7 +20,7 @@ function __ovm_cmd_do_info {
 function __ovm_cmd_do_load {
     mod_name=$1
 
-    IFS=:
+    IFS=$':'
     for p in $OVM_MODULES_PATH;
     do
         path="$p/$mod_name/loader"
@@ -33,7 +33,7 @@ function __ovm_cmd_do_load {
 }
 
 function __ovm_cmd_do_ls {
-    IFS=:
+    IFS=$':'
     for p in $OVM_MODULES_PATH;
     do
         echo ""
@@ -64,7 +64,7 @@ function __ovm_cmd_do_ls {
 }
 
 function __ovm_cmd_do_show_config {
-    IFS=:
+    IFS=$':'
     for p in $OVM_MODULES_PATH;
     do
         if [ -d "$p" ]; then

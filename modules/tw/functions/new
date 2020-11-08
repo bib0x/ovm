@@ -1,0 +1,89 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("task")
+
+__ovm_validator_packages "tw-new" "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tw-new {
+    
+	casename=""
+	casetype=""
+    case $# in
+        1)
+            casename="$1"
+            ;;
+		2)
+			casename="$1"
+			casetype="$2"
+			;;
+        *)
+            read -p 'New case name: ' casename
+            ;;
+    esac
+    [ ! -z "${casename}" ] || { return 1; }
+
+    tmpdir="${OVM_WCASEROOT}/${casename}"
+    [ ! -d "${tmpdir}" ] ||  tw-go "${casename}";
+
+    export OVM_WCASE="${casename}"
+    export OVM_WCASEDIR="${tmpdir}"
+
+    mkdir -p "${OVM_WCASEDIR}"/{delivery,raw,working} 2>/dev/null
+    touch "${OVM_WCASEDIR}"/{started,notes.txt}
+
+    # init notes.txt
+cat >"${OVM_WCASEDIR}/notes.txt" <<EOF
+Context
+=======
+
+Info
+====
+
+Summary
+=======
+
+EOF
+
+	# @TODO: dispatcher shit
+	if [ -z "${casetype}"]; then
+		read -p "Casetypes [${OVM_WCASETYPES}]: " casetype
+		if [ -z "${casetype}" ]; then 
+			casetype="default" 
+		fi
+	fi
+
+	casetypepath=""
+	IFS=$':'
+	for path in "${OVM_WCASETYPESPATH}"; do
+		
+		if [ ! -z "${OVM_WCASETYPESDIR}" ] && [ "${path}" == "${OVM_WCASETYPESDIR}" ]; then
+			casetypepath="${path}"
+			break
+		fi
+
+		answer="no"		
+		read -p "Use casetypes in: ${path} (yes/no) ? [${answer}] " answer	
+        if [ "${answer}" == "yes" ]; then
+			casetypepath="${path}"	
+			break
+		fi
+	done
+    unset IFS
+
+	if [ ! -z "${casetypepath}" ]; then
+		casetpl="${casetypepath}/${casetype}"
+		if [ -f "${casetpl}" ]; then
+			source "${casetpl}"
+			__ovm-tw-new-casetpl 
+		fi
+	fi
+
+}

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("task")
+
+__ovm_validator_packages "tw-timeline" "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tw-timeline {
+    case $# in
+        1)
+            casename="$1"
+            task project:"${casename}" timeline | tail -n +4 | head -n -2
+            ;;
+        2)
+            casename="$1"
+            casetags="$2"
+            task "${casetags}" project:"${casename}" timeline | tail -n +4 | head -n -2
+            ;;
+        *)
+            if [ ! -z "${OVM_WCASE}" ]; then
+                casename="${OVM_WCASE}"
+                task project:"${casename}" timeline | tail -n +4 | head -n -2
+            fi
+            ;;
+    esac
+}
