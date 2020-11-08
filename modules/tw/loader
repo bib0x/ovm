@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/loader"
+
+export OVM_WCASE=
+export OVM_WCASEDIR=
+export OVM_WCASETYPES="${OVM_WCASETYPES:-default}"
+export OVM_WCASETYPESDIR=
+export OVM_WCASETYPESPATH="${OVM_WCASETYPESPATH:-${OVM_PATH}/modules/tw/functions/casetypes}"
+export OVM_WCASEROOT="${OVM_WCASEROOT:-/tmp}"
+
+root=$(dirname "${BASH_SOURCE[0]}")
+__ovm_dynamic_loader "$root/functions"
+
+function __ovm-tw-new-taskcase {
+    cname=$1
+    desc=$2 && shift && shift
+    tag=$@
+
+    # message example: Created task 37.
+    message=$(task project:"${cname}" add "${desc}" $tag)
+    taskid=$(echo "${message}" | awk '{ print $3--; }')
+    echo ${taskid}
+}

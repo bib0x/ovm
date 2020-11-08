@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tw-path {
+    [ ! -z "${OVM_WCASEDIR}" ] || { echo "No case found. (check \$OVM_WCASEDIR)"; return 1; }
+    echo "${OVM_WCASEDIR}"
+}

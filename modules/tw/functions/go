@@ -1,0 +1,39 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("task")
+
+__ovm_validator_packages "tw-go" "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tw-go {
+    
+    case $# in
+        1)
+            casename="$1"
+            ;;
+        *)
+            if [ ! -z "${OVM_WCASE}" ]; then
+                casename="${OVM_WCASE}"
+            else
+                echo "Ongoin cases:"
+                tw-cases
+                read -p 'Enter a case name: ' casename
+            fi
+            ;;
+    esac
+    [ ! -z "${casename}" ] || { return 1; }
+
+    tmpdir="${OVM_WCASEROOT}/${casename}"
+    [ -d "${tmpdir}" ] || { echo "case ${casename} not found"; return 1; }
+
+    export OVM_WCASE="${casename}"
+    export OVM_WCASEDIR="${tmpdir}"
+    cd "${tmpdir}"
+}

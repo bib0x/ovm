@@ -1,0 +1,38 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("task")
+
+__ovm_validator_packages "tw-about" "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tw-about {
+    
+    case $# in
+        1)
+            casename="$1"
+            ;;
+        *)
+            if [ ! -z "${OVM_WCASE}" ]; then
+                casename="${OVM_WCASE}"
+            else
+                echo "Ongoin cases:"
+                tw-cases
+                read -p 'Enter a case name: ' casename
+            fi
+            ;;
+    esac
+    [ ! -z "${casename}" ] || { return 1; }
+
+    tmpdir="${OVM_WCASEROOT}/${casename}"
+    [ -d "${tmpdir}" ] || { echo "case ${casename} not found"; return 1; }
+
+    [ -f "${tmpdir}"/notes.txt ] || { echo "${casename}: Notes not found"; return 1; }
+    head "${tmpdir}"/notes.txt
+}

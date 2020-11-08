@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("env" "grep")
+
+__ovm_validator_packages "tw-env" "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tw-env {
+    env | grep 'OVM_WCASE' --color=never  
+}

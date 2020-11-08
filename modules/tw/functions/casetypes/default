@@ -1,0 +1,7 @@
+#!/bin/bash
+
+function __ovm-tw-new-casetpl {
+    tid=$(__ovm-tw-new-taskcase "${OVM_WCASE}" "Information Gathering" +case +main)
+    tid=$(__ovm-tw-new-taskcase "${OVM_WCASE}" "Todo" +case +main)
+    tid=$(__ovm-tw-new-taskcase "${OVM_WCASE}" "Report" +case +main)
+}

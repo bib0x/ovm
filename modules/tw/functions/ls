@@ -1,0 +1,35 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("task")
+
+__ovm_validator_packages "tw-ls" "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function tw-ls {
+    case $# in
+        1)
+            casename="$1"
+            task project:"${casename}"
+            ;;
+        2)
+            casename="$1"
+            casetags="$2"
+            task "${casetags}" project:"${casename}"
+            ;;
+        *)
+            if [ ! -z "${OVM_WCASE}" ]; then
+                casename="${OVM_WCASE}"
+                task project:"${casename}"
+            else
+                tw-cases
+            fi
+            ;;
+    esac
+}
