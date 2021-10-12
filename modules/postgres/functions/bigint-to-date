@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function postgres-bigint-to-date {
+    local bigint=$1
+    local unixts=$(($bigint/1000))
+
+    date -d @$unixts
+}

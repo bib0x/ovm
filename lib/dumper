@@ -11,6 +11,13 @@ function __ovm_markdown_dumper {
         $glowbin -s dark "$path"
         return
     fi
+    # Global setup
+    command -v glow >/dev/null 2>&1
+    if [ $? -eq 0 ];
+    then
+        glow -s dark "$path"
+        return
+    fi
 
     # Pandoc & lynx
     command -v pandoc >/dev/null 2>&1
