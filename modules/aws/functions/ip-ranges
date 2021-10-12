@@ -1,0 +1,23 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requirements
+# ---------------------------------------
+local packages=("curl" "jq")
+
+__ovm_validator_packages "${packages[@]}" || return
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function aws-ip-ranges {
+    url="https://ip-ranges.amazonaws.com/ip-ranges.json"
+    target=/tmp/aws-ip-ranges.json
+
+    if [ ! -f "$target" ]; then
+        curl -s -X GET "$url" -o "$target" 
+    fi
+
+    cat "$target" | jq .
+}
