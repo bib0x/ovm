@@ -31,8 +31,16 @@ function __ovm_markdown_dumper {
         fi
     fi
 
+    # Bat
+    command -v bat >/dev/null 2>&1
+    if [ $? -eq 0 ];
+    then
+        bat "$path"
+        return
+    fi
+    
     # Default
-    /bin/cat "$path"
+    cat "$path"
 }
 
 function __ovm_highlight {
