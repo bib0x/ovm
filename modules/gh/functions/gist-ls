@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#
+# USAGE: gh-gist-ls [ <language> ]
+# 
+# This function is searching for Github Gist (using ghithub-cli)
+# and can filter them on programming language specified 
+# in the Gist description.
+#
+# /!\ WARNING /!\ 
+# To be able to filter on language, your Gist description 
+# must respect a specific format, such as:
+#
+# [language] your description
+#
+# EXAMPLE:
+#
+# [bash] dynamic associative array 
+# [python] http client implementation
+# [js] expressjs: bootstrap new project
+#
+
+source "$OVM_PATH/lib/validator"
+
+local packages=(bat fzf gh grep)
+
+__ovm_validator_packages "gh-gist-ls" "${packages[@]}" || return
+
+function gh-gist-ls {
+  
+  # Test Github login
+  if ! (gh auth status --hostname "github.com" > /dev/null 2>&1); then
+    echo "Error: not logged into Github."
+    echo "Please run: gh auth login"
+    return 1
+  fi
+  
+  limit=50
+  prompt="gist > "
+  
+  if [ $# -eq 1 ]; then
+    lang="$1"
+    gh gist list --limit $limit | grep "\[${lang}\]" |  fzf --prompt="$prompt" --preview="echo {} | awk '{print \$1}' | xargs -n 1 gh gist view | bat -l $lang --style=numbers --color=always" | awk '{print $1}'
+  else
+    gh gist list --limit $limit | fzf --ansi --prompt="$prompt" --preview="echo {} | awk '{print \$1}' | xargs -n 1 gh gist view | bat --style=numbers --color=always" | awk '{print $1}'
+  fi
+
+  return 0
+}
+
+function __ovm_gh_gist_ls_completion() {
+  local cur
+  COMPREPLY=()
+  cur=${COMP_WORDS[COMP_CWORD]}
+
+  case $COMP_CWORD in
+    1)
+      supported_languages="bash c cpp js golang perl python ruby rust typescript"
+      COMPREPLY=($( compgen -W "${supported_languages}" -- $cur ) )
+      ;;
+  esac
+}
+
+complete -F __ovm_gh_gist_ls_completion gh-gist-ls
