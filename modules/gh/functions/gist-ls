@@ -61,7 +61,7 @@ function __ovm_gh_gist_ls_completion() {
 
   case $COMP_CWORD in
     1)
-      supported_languages="bash c cpp js golang perl python ruby rust typescript"
+      supported_languages="bash c cpp js golang nix perl python ruby rust typescript"
       COMPREPLY=($( compgen -W "${supported_languages}" -- $cur ) )
       ;;
   esac
