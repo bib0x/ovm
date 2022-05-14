@@ -5,19 +5,32 @@ source "$OVM_PATH/lib/validator"
 # ---------------------------------------
 # Requirements
 # ---------------------------------------
-local packages=("curl" "jq")
+local packages=("cat" "curl" "date" "jq" "stat")
 
 __ovm_validator_packages "${packages[@]}" || return
+
 # ---------------------------------------
 # Code
 # ---------------------------------------
-function aws-ip-ranges {
-    url="https://ip-ranges.amazonaws.com/ip-ranges.json"
-    target=/tmp/aws-ip-ranges.json
+function aws-ipr {
+  curl -s -X GET "${OVM_AWS_IPRANGES_URL}" | jq .
+}
 
-    if [ ! -f "$target" ]; then
-        curl -s -X GET "$url" -o "$target" 
+function aws-ipr-cache {
+  target=/tmp/aws-ip-ranges.json
+
+  if [ ! -f "$target" ]; then 
+    curl -s -X GET "${OVM_AWS_IPRANGES_URL}" -o "$target"
+  else
+    created_at=$(stat -c '%W' "$target")
+    now=$(date +%s)
+    diff=$((($now-$created_at)/60))
+
+    # By default, cache is refreshed if more than 1h
+    if [ $diff -ge $OVM_AWS_IPRANGES_CACHE_REFRESH ]; then
+      curl -s -X GET "${OVM_AWS_IPRANGES_URL}" -o "$target"
     fi
+  fi
 
-    cat "$target" | jq .
+  cat "$target" | jq .
 }
