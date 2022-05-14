@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/loader"
+
+export OVM_AWS_IPRANGES_URL=${OVM_AWS_IPRANGES_URL:-"https://ip-ranges.amazonaws.com/ip-ranges.json"}
+export OVM_AWS_IPRANGES_CACHE_LOCATION=${OVM_AWS_IPRANGES_CACHE_LOCATION:-"/tmp/aws-ip-ranges.json"}
+export OVM_AWS_IPRANGES_CACHE_REFRESH=${OVM_AWS_IPRANGES_CACHE_REFRESH:-60}
+
+root=$(dirname "${BASH_SOURCE[0]}")
+__ovm_dynamic_loader "$root/functions"
