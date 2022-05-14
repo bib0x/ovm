@@ -46,9 +46,15 @@ function gh-gist-ls {
       lang_color="js"
     fi
 
-    gh gist list --limit $limit | grep "\[${lang}\]" |  fzf --prompt="$prompt" --preview="echo {} | awk '{print \$1}' | xargs -n 1 gh gist view | bat -l $lang_color --style=numbers --color=always" | awk '{print $1}'
+    gistid=$(gh gist list --limit $limit | grep "\[${lang}\]" |  fzf --prompt="$prompt" --preview="echo {} | awk '{print \$1}' | xargs -n 1 gh gist view | bat -l $lang_color --style=numbers --color=always" | awk '{print $1}')
+    if [ ! -z "$gistid" ]; then
+      gh gist view "$gistid"
+    fi
   else
-    gh gist list --limit $limit | fzf --ansi --prompt="$prompt" --preview="echo {} | awk '{print \$1}' | xargs -n 1 gh gist view | bat --style=numbers --color=always" | awk '{print $1}'
+    gistid=$(gh gist list --limit $limit | fzf --ansi --prompt="$prompt" --preview="echo {} | awk '{print \$1}' | xargs -n 1 gh gist view | bat --style=numbers --color=always" | awk '{print $1}')
+    if [ ! -z "$gistid" ]; then
+      gh gist view "$gistid"
+    fi
   fi
 
   return 0
