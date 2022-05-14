@@ -1,4 +1,4 @@
-# [ postgres ]
+# [ aws ]
 
 This module contains useful function for AWS shortcuts
 
