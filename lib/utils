@@ -34,3 +34,11 @@ function __ovm_ssh_stop_forward {
         fuser -n tcp "$localport" >/dev/null 2>&1 -k
     fi
 }
+
+function __ovm_ssh_stop_lforward_config {
+    host=$1
+    if [ ! -z "$host" ]; then
+      pid=$(ps -x -o pid,command | awk "/[s]sh $host/"'{print $1}')
+      kill -9 $pid
+    fi
+}
