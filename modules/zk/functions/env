@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requirements
+# ---------------------------------------
+local packages=(env grep printenv tr)
+__ovm_validator_packages "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function zk-env {
+  [ $# -le 1 ] || { echo "usage: ${FUNCNAME[0]} [ <env> ]"; return 1; }
+
+  env_wanted=${1:-$OVM_ZK_DEFAULT_ENV}
+  env_found=$(env | grep -Po 'OVM_ZK_ENV_\K(.*)=' | tr -d '=' | grep -i "$env_wanted")
+
+  if [ -z "$env_found" ]; then
+    env_uppercase=$(echo $env_wanted | tr '[[:lower:]]' '[[:upper:]]')
+    echo "$env_wanted not found."
+    echo "Hint: export OVM_ZK_ENV_$env_uppercase=<location>"
+    return 1
+  fi
+  
+  target="OVM_ZK_ENV_$env_found"
+  location=$(printenv $target)
+
+  if [ -e "$location" ] && [ -d "$location" ]; then
+    export ZK_NOTEBOOK_DIR="$location"
+    export OVM_ZK_ENV="$env_wanted"
+    return 0
+  fi
+
+  return 1
+}
+
+# ---------------------------------------
+# Autocompletion
+# ---------------------------------------
+function __zk_env_completion() {
+    local cur
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    case $COMP_CWORD in
+        1)
+            zk_envs=$(env | grep -Po 'OVM_ZK_ENV_\K(.*)=' | tr -d '=' | tr '[[:upper:]]' '[[:lower:]]')
+            COMPREPLY=($( compgen -W "$zk_envs" -- "$cur" ) )
+            ;;
+    esac
+}
+
+complete -F __zk_env_completion zk-env

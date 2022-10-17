@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requirements
+# ---------------------------------------
+local packages=(cut grep sed tail xargs)
+__ovm_validator_packages "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function __zk_aliases_completions {
+  limit=100
+  path="$OVM_ZK_GCONFIG";
+
+  # If no global config set, will take the local NOTEBOOK one
+  if [ -z $path ] || [ ! -f $path ]; then
+    path="$ZK_NOTEBOOK_DIR/.zk/config.toml"
+  fi
+
+  [ -f $path ] || { echo "Configuration $path not found."; return 1; }
+
+    local cur
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    case $COMP_CWORD in
+        1)
+            zk_aliases=$( grep -vE '^#' $path | grep -e '\[alias\]' -A $limit | sed '/^$/d' | tail +2 | cut -d '=' -f 1 | sort | xargs)
+            COMPREPLY=($( compgen -W "${zk_aliases}" -- $cur ) )
+            ;;
+    esac
+}
+
+complete -F __zk_aliaes_completions zk
+
