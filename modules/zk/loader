@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/loader"
+
+export OVM_ZK_DEFAULT_ENV=${OVM_ZK_DEFAULT_ENV:-""}
+export OVM_ZK_ENV="${OVM_ZK_ENV:-$OVM_ZK_DEFAULT_ENV}"
+export OVM_ZK_GCONFIG="${OVM_ZK_GCONFIG:-$HOME/.config/zk/config.toml}"
+
+root=$(dirname "${BASH_SOURCE[0]}")
+__ovm_dynamic_loader "$root/functions"
