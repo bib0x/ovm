@@ -33,5 +33,5 @@ function __zk_aliases_completions {
     esac
 }
 
-complete -F __zk_aliaes_completions zk
+complete -F __zk_aliases_completions zk
 
