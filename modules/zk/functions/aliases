@@ -21,6 +21,6 @@ function zk-aliases {
 
   [ -f $path ] || { echo "Configuration $path not found."; return 1; }
 
-  grep -vE '^#' $path | sed -n '/\[alias\]/,/^\[/p' | sed '/^$/d' | tail -n +2 | head -n -1 | bat --color=always -p -l toml
+  grep -vE '^#' $path | sed -n '/\[alias\]/,/^\[/p' | sed '/^$/d' | grep -v '^\[' | bat --color=always -p -l toml
 }
 
