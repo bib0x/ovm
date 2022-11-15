@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+source "$OVM_PATH/lib/validator"
+
+local packages=(firefox rofi)
+
+__ovm_validator_packages "hots-bo" "${packages[@]}" || return
+
+function hots-bo {
+  heroes=(abathur alarak alexstrasza ana anubarak
+  artanis arthas auriel azmodan brightwing
+  cassia chen cho chromie dehaka
+  diablo dva e-t-c falstad gall
+  garrosh gazlowe genji greymane guldan
+  illidan jaina johanna junkrat kaelthas
+  kel-thuzad kerrigan kharazim leoric li-li
+  li-ming lt-morales lucio lunara malfurion
+  malthael medivh muradin murky nazeebo
+  nova probius ragnaros raynor rehgar
+  rexxar samuro sgt-hammer sonya stitches
+  stukov sylvanas tassadar the-butcher the-lost-vikings
+  thrall tracer tychus tyrael tyrande
+  uther valeera valla varian xul
+  zagara zarya zeratul zuljin)
+
+  choice=$(echo "${heroes[@]}" | xargs -n 1 | rofi -dmenu -p "Hero")
+
+  if [ ! -z $choice ]; then
+    url="https://www.icy-veins.com/heroes/${choice}-build-guide#${choice}s-talent-build-cheatsheet"
+    firefox $url &>/dev/null &disown;
+  fi  
+
+  return 0
+}
+
