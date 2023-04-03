@@ -7,7 +7,7 @@ source "$OVM_PATH/lib/validator"
 # ---------------------------------------
 local packages=("sed")
 
-__ovm_validator_packages "toolbox-hex2pylist" "${packages[@]}" || return
+__ovm_validator_packages "convert-hex2pylist" "${packages[@]}" || return
 # ---------------------------------------
 # Code
 # ---------------------------------------
@@ -15,7 +15,7 @@ __ovm_validator_packages "toolbox-hex2pylist" "${packages[@]}" || return
 # 2. add '0x' as a prefix for each elements
 # 3. add ', ' as elements separator
 # 4. add last list bracket ]
-function toolbox-hex2pylist {
+function convert-hex2pylist {
 
   [ $# -gt 0 ] || { echo "usage: ${FUNCNAME[0]} <num1> <num2> ..."; return 1; }
 	

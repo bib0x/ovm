@@ -1,8 +1,8 @@
-# [ toolbox ]
+# [ convert ]
 
-This module contains different oneliner that could be handy time to time.
+This module contains different oneliner that could be handy time to time when converting data.
 
-## toolbox-hex2pylist
+## convert-hex2pylist
 
 ```
 $ toolbox-hex2pylist <num1> <num2> ... 
