@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=("sed")
+
+__ovm_validator_packages "toolbox-hex2pylist" "${packages[@]}" || return
+# ---------------------------------------
+# Code
+# ---------------------------------------
+# 1. add first list bracket [
+# 2. add '0x' as a prefix for each elements
+# 3. add ', ' as elements separator
+# 4. add last list bracket ]
+function toolbox-hex2pylist {
+
+  [ $# -gt 0 ] || { echo "usage: ${FUNCNAME[0]} <num1> <num2> ..."; return 1; }
+	
+  echo -n '[';
+  echo $* | sed -E 's/([0-9a-f]{2})/0x\1/g' | sed -E 's/ /, /g' | sed -E 's/$/]/'
+}
+
