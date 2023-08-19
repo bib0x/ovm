@@ -11,7 +11,7 @@ __ovm_validator_packages "${packages[@]}" || return
 # Code
 # ---------------------------------------
 function zk-gist-output {
-  [ $# -eq 1 ] || { echo "usage: ${FUNCNAME[0]} <path>" }
+  [ $# -eq 1 ] || { echo "usage: ${FUNCNAME[0]} <path>"; return 1; }
   [ -f "$1" ] || { echo "File $1 not found."; return 1; }
 
   filename="$1"

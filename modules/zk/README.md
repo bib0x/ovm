@@ -92,3 +92,12 @@ $ env | grep ZK
 OVM_ZK_ENV=work
 ZK_NOTEBOOK_DIR=/tmp/work
 ```
+
+## zk-gist-output
+
+This function displays source code snippet from a markdown code markup.
+
+```
+$ zk-gist-output
+usage: zk-gist-output <path>
+```
