@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requirements
+# ---------------------------------------
+local packages=(grep head sed tr)
+__ovm_validator_packages "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function zk-gist-output {
+  [ $# -eq 1 ] || { echo "usage: ${FUNCNAME[0]} <path>" }
+  [ -f "$1" ] || { echo "File $1 not found."; return 1; }
+
+  filename="$1"
+  lang=$(head -n 1 $filename | grep -Eo '([a-zA-Z0-9]+):' | tr -d ':')
+
+  # Print mardown code block
+  sed -n '/^```/,/^```/p' $filename | sed '/```/d'  | bat -p -l $lang
+}
+
