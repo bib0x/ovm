@@ -32,9 +32,21 @@ function __zk_aliases_completions {
     COMPREPLY=( $(compgen -W "${zk_aliases}" -- $cur ) )
   elif [ $COMP_CWORD -eq 2 ]; then
     case $prev in
-      "lt")
+      "lt") # zk lt
         local zk_tags=$(zk tag list -f name -P -q 2>&1| xargs)
         COMPREPLY=( $(compgen -W "${zk_tags}" -- $cur ) )
+        ;;
+      *)
+        ;;
+    esac
+  elif [ $COMP_CWORD -eq 3 ]; then
+    case $prev in
+      "-t") # zk gist -t
+        local prev_prev=${COMP_WORDS[COMP_CWORD-2]}
+        if [ "$prev_prev" = "gist" ]; then 
+          local zk_gist_lang=$(zk list -t gist -f oneline -q 2>&1 | awk '{print $2}' | tr -d ':' | sort -u | xargs)
+          COMPREPLY=( $(compgen -W "${zk_gist_lang}" -- $cur ) )
+        fi
         ;;
       *)
         ;;
