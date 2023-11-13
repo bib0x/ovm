@@ -1,0 +1,26 @@
+#!/bin/bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requirements
+# ---------------------------------------
+local packages=("gpg" "grep" "sed")
+
+__ovm_validator_packages "${packages[@]}" || return
+
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function git-crypt-pubkey-info {
+
+  [ $# -le 1 ] || { echo "usage: ${FUNCNAME[0]} <gpg-keys-directory>"; return 1; }
+
+  directory=${1:-.git-crypt/keys/default/0}
+  for key in $directory/*.gpg; do
+    keyfile=$(basename "$key")
+    echo -n "$keyfile: "
+    gpg --list-packets "$key" 2>&1 | grep '@' | sed -E 's/^\s+//g'
+  done
+
+}
