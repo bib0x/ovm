@@ -19,8 +19,10 @@ function git-crypt-pubkey-info {
   directory=${1:-.git-crypt/keys/default/0}
   for key in $directory/*.gpg; do
     keyfile=$(basename "$key")
-    echo -n "$keyfile: "
+    echo -n "${keyfile%.gpg} : "
+    sleep 0.1
     gpg --list-packets "$key" 2>&1 | grep '@' | sed -E 's/^\s+//g'
+    echo
   done
 
 }
