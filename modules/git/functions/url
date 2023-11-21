@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+source "$OVM_PATH/lib/validator"
+
+# ---------------------------------------
+# Requierements
+# ---------------------------------------
+local packages=(sed tr)
+
+__ovm_validator_packages "git-url" "${packages[@]}" || return
+# ---------------------------------------
+# Code
+# ---------------------------------------
+function git-url {
+
+  [ $# -eq 0 ] || { echo "usage: ${FUNCNAME[0]}"; return 1; }
+  [ -d ./.git ] || { echo "Not in a git repositiry"; return 1; }
+
+  git_repo_url=$(git config --get remote.origin.url)
+  last_commit=$(git rev-parse HEAD)
+  short_commit_h=${last_commit:0:8}
+  baseurl=$( \
+    echo $git_repo_url \
+    | tr ':' '/' \
+    | sed -e 's/\.git$//g' -e 's/git@//' \
+  )
+
+  echo "https://$baseurl/commit/$short_commit_h"
+}
+
